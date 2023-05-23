@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistema de Registro y Inicio de Sesión</title>
+</head>
+<body>
+    <h1>Sistema de Registro y Inicio de Sesión</h1>
+
+    <h2>Registro de Usuario</h2>
+    <form id="registrationForm">
+        <label for="regUsername">Nombre de Usuario:</label>
+        <input type="text" id="regUsername" required><br><br>
+        <label for="regPassword">Contraseña:</label>
+        <input type="password" id="regPassword" required><br><br>
+        <button type="submit">Registrarse</button>
+    </form>
+
+    <h2>Inicio de Sesión</h2>
+    <form id="loginForm">
+        <label for="username">Usuario:</label>
+        <input type="text" id="username" required><br><br>
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" required><br><br>
+        <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    <script>
+        // Variable para almacenar los usuarios registrados
+        var users = [];
+
+        // Función para registrar un nuevo usuario
+        function registerUser(event) {
+            event.preventDefault(); // Evitar el envío del formulario
+
+            // Obtener los valores del formulario de registro
+            var regUsername = document.getElementById('regUsername').value;
+            var regPassword = document.getElementById('regPassword').value;
+
+            // Verificar si el usuario ya está registrado
+            if (isUserRegistered(regUsername)) {
+                alert('El nombre de usuario ya está registrado. Intente con otro.');
+                return;
+            }
+
+            // Crear un objeto de usuario
+            var user = {
+                username: regUsername,
+                password: regPassword
+            };
+
+            // Agregar el usuario a la lista de usuarios registrados
+            users.push(user);
+
+            // Limpiar el formulario de registro
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPassword').value = '';
+
+            alert('Registro exitoso. Ahora puedes iniciar sesión.');
+        }
+
+        // Función para verificar si un usuario está registrado
+        function isUserRegistered(username) {
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].username === username) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Función para realizar el inicio de sesión
+        function login(event) {
+            event.preventDefault(); // Evitar el envío del formulario
+
+            // Obtener los valores del formulario de inicio de sesión
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            // Verificar las credenciales
+            var user = getUserByUsername(username);
+            if (user && user.password === password) {
+                // Redireccionar a la página del inventario
+                window.location.href = 'inventory.html';
+            } else {
+                alert('Credenciales inválidas. Intente nuevamente.');
+            }
+        }
+
+        // Función para obtener un usuario por su nombre de usuario
+        function getUserByUsername(username) {
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].username === username) {
+                    return users[i];
+                }
+            }
+            return null;
+        }
+
+        // Asignar los eventos submit a los formularios
+        var registrationForm = document.getElementById('registrationForm');
+        registrationForm.addEventListener('submit', registerUser);
+
+        var loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', login);
+    </script>
+</body>
+</html>
